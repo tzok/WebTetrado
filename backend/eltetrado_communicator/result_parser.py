@@ -509,7 +509,7 @@ def add_task_to_queue(user_request):
                 {
                     "pdb_mmcif_b64": str(base64file.decode("utf-8")),
                     "noReorder": user_request.no_reorder,
-                    "analyzer": "INTERNAL",
+                    "analyzer": user_request.analyzer,
                     "model": user_request.model,
                 }
             ),

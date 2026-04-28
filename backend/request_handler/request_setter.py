@@ -19,6 +19,7 @@ def set_user_request_action(body: Dict):
     entity.no_reorder = not body["settings"]["reorder"]
     entity.g4_limited = body["settings"]["g4Limited"]
     entity.model = body["settings"]["model"]
+    entity.analyzer = body.get("analyzer", "INTERNAL")
     entity.status = 1
 
     if "fileId" in body and len(body["fileId"]) > 0:

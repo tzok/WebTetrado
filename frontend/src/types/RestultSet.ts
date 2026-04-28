@@ -66,6 +66,7 @@ export type helice = {
   tetrad_pairs: tetrad_pair[];
 };
 export type result_values = {
+  analyzer: string;
   name: string;
   dot_bracket: dot_bracket_values;
   status: number;
@@ -98,6 +99,7 @@ export type visualsation_switch_result = {
   r_chie_canonical: boolean;
 };
 export type request_form_values = {
+  analyzer: string;
   fileId: string;
   rcsbPdbId: string;
   settings: {
@@ -105,4 +107,10 @@ export type request_form_values = {
     g4Limited: boolean;
     model: number;
   };
+};
+
+export type analyzer_option = {
+  id: string;
+  label: string;
+  enabled: boolean;
 };

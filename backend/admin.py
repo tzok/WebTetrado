@@ -35,6 +35,7 @@ class TetradoRequest(admin.ModelAdmin):
         "draw_tetrado",
         "no_reorder",
         "model",
+        "analyzer",
         "elTetradoKey",
     )
 

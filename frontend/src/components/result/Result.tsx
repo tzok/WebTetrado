@@ -20,6 +20,7 @@ const StructureVisualisation = lazy(() => import("./StructureVisualisation"));
  
 export const Result = () => {
   let result: result_values = {
+    analyzer: "RNApolis Annotator",
     name: "",
     dot_bracket: { line1: "", line2: "", sequence: "" },
     status: 0,
@@ -88,6 +89,8 @@ export const Result = () => {
           </Tooltip>
         </span>
       </h2>
+
+      {resultSet.status >= 1 ? <p>Analyzer: <b>{resultSet.analyzer}</b></p> : <></>}
 
       <Steps current={resultSet.status} items={steps} status="wait" />
       {resultSet.status == 5 ? (

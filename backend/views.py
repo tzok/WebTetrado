@@ -10,8 +10,12 @@ from asgiref.sync import sync_to_async
 from django.views.decorators.http import require_POST
 from django.shortcuts import render
 import json
-from backend.web_push.subscription_handler import save_notification_subscription_action, link_notification_to_task_action
-from WebTetrado.settings import FRONTEND_LOCATION
+import requests
+from backend.web_push.subscription_handler import (
+    save_notification_subscription_action,
+    link_notification_to_task_action,
+)
+from WebTetrado.settings import FRONTEND_LOCATION, WEBTETRADO_BACKEND_URL
 
 
 @csrf_exempt
@@ -24,8 +28,11 @@ def file_handler_endpoint(request):
     if request.FILES["structure"]:
         return HttpResponse(
             status=200,
-            content=bytes('{"id": "%s", "models": %d,"error":"%s"}'
-            % (handle_uploaded_file(request.FILES["structure"])),'UTF-8'),
+            content=bytes(
+                '{"id": "%s", "models": %d,"error":"%s"}'
+                % (handle_uploaded_file(request.FILES["structure"])),
+                "UTF-8",
+            ),
             content_type="application/json",
         )
     return HttpResponse(status=500)
@@ -35,6 +42,15 @@ def user_request_result_endpoint(request, order_id):
     return HttpResponse(
         status=200,
         content=bytes(get_result_action(order_id), "UTF-8"),
+        content_type="application/json",
+    )
+
+
+def analyzers_endpoint(request):
+    response = requests.get(WEBTETRADO_BACKEND_URL + "/v1/analyzers", timeout=30)
+    return HttpResponse(
+        status=response.status_code,
+        content=response.content,
         content_type="application/json",
     )
 
@@ -67,7 +83,13 @@ async def websocket_endpoint(socket):
 def link_notification_to_task_endpoint(request):
     try:
         return HttpResponse(
-            status=(200 if link_notification_to_task_action(json.loads(request.body.decode("utf-8"))) else 400)
+            status=(
+                200
+                if link_notification_to_task_action(
+                    json.loads(request.body.decode("utf-8"))
+                )
+                else 400
+            )
         )
     except ValueError:
         return HttpResponse(status=400)
@@ -76,8 +98,10 @@ def link_notification_to_task_endpoint(request):
 @require_POST
 def save_notification_subscription_endpoint(request):
     try:
-        status, response = save_notification_subscription_action(json.loads(request.body.decode("utf-8")),request.headers["user-agent"])
-        return HttpResponse(status=status,content=response)
+        status, response = save_notification_subscription_action(
+            json.loads(request.body.decode("utf-8")), request.headers["user-agent"]
+        )
+        return HttpResponse(status=status, content=response)
     except ValueError:
         return HttpResponse(status=400)
 

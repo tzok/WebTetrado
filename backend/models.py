@@ -181,6 +181,7 @@ class TetradoRequest(models.Model):
     no_reorder = models.BooleanField()
     g4_limited = models.BooleanField()
     model = models.IntegerField(default=1)
+    analyzer = models.CharField(max_length=50, default="INTERNAL")
 
     name = models.CharField(max_length=200, blank=True)
     structure_method = models.CharField(max_length=200, blank=True)

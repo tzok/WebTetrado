@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   message,
+  Select,
   Slider,
   Spin,
   Switch,
@@ -14,6 +15,8 @@ import { useEffect, useState } from "react";
 import { UseAppContext } from "../../AppContextProvider";
 import lang from "../../lang.json";
 import { request_form_values } from "../../types/RestultSet";
+import { analyzer_option } from "../../types/RestultSet";
+import { fetchAnalyzers } from "../../utils/adapters/fetchAnalyzers";
 import { checkRcsbMaxModel } from "../../utils/adapters/checkRcsbMaxModel";
 import { processingRequest } from "../../utils/adapters/processingRequest";
 import UploadStructureFile from "./UploadStructureFile";
@@ -22,6 +25,7 @@ const { Panel } = Collapse;
 export default function RequestForm() {
   const context = UseAppContext();
   let form_values: request_form_values = {
+    analyzer: "INTERNAL",
     fileId: "",
     rcsbPdbId: "",
     settings: {
@@ -35,6 +39,7 @@ export default function RequestForm() {
   const [pdbError, setPDBError] = useState(false);
   const [maxModelQuery, setMaxModelQuery] = useState(false);
   const [formValues, setFormValues] = useState(form_values);
+  const [analyzers, setAnalyzers] = useState<analyzer_option[]>([]);
   const [fileListState, setFileList] = useState<UploadFile[] | undefined>(
     undefined
   );
@@ -50,6 +55,21 @@ export default function RequestForm() {
     setLoading(true);
     processingRequest(formValues, setLoading);
   };
+  useEffect(() => {
+    fetchAnalyzers()
+      .then((response) => setAnalyzers(response.filter((item) => item.enabled)))
+      .catch(() =>
+        setAnalyzers([
+          { id: "INTERNAL", label: "RNApolis Annotator", enabled: true },
+          { id: "RNAVIEW", label: "RNAView", enabled: true },
+          { id: "FR3D", label: "FR3D", enabled: true },
+          { id: "MAXIT", label: "MAXIT", enabled: true },
+          { id: "MC_ANNOTATE", label: "MC-Annotate", enabled: true },
+          { id: "BARNABA", label: "Barnaba", enabled: true },
+          { id: "BPNET", label: "BPNet", enabled: true },
+        ])
+      );
+  }, []);
   useEffect(() => {
     if (formValues.fileId === "") setMaxModel(0);
 
@@ -292,6 +312,21 @@ export default function RequestForm() {
         >
           <Collapse defaultActiveKey={1} style={{ width: "100%", maxWidth: '890px' }}>
             <Panel header="Additional settings" key="1">
+              <Form.Item>
+                <div className="horizontal-item-center">
+                  <div className="item-label">
+                    <Tooltip title={'Select which base-pair analyzer should be used before quadruplex detection'}>
+                      Base-pair analyzer:
+                    </Tooltip>
+                  </div>
+                  <Select
+                    style={{ width: "calc(50% - 5px)", maxWidth: "260px" }}
+                    value={formValues.analyzer}
+                    options={analyzers.map((item) => ({ value: item.id, label: item.label }))}
+                    onChange={(value) => setFormValues({ ...formValues, analyzer: value })}
+                  />
+                </div>
+              </Form.Item>
               <Form.Item>
                 <div className="horizontal-item-center">
                   <div
