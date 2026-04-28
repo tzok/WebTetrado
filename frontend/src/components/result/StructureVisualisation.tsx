@@ -303,7 +303,7 @@ export default function StructureVisualisation(
             >
               <div style={{ marginTop: "108px" }}></div>
               <Image
-                alt="draw-tetardo"
+                alt="draw-tetrado"
                 className="two-d-image"
                 src={config.SERVER_URL + props.resultSet.draw_tetrado}
               />

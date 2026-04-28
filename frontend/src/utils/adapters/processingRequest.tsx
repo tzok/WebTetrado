@@ -5,13 +5,12 @@ import lang from "../../lang.json";
 import fetch from "node-fetch";
 
 type form_values = {
+    analyzer: string;
     fileId: string;
     rcsbPdbId: string;
     settings: {
-        complete2d: boolean;
         reorder: boolean;
-        stackingMatch: number;
-        strict: boolean;
+        g4Limited: boolean;
         model: number;
     };
 };

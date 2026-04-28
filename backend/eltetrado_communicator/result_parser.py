@@ -1,3 +1,4 @@
+import logging
 import traceback
 import time
 import requests
@@ -71,6 +72,7 @@ def add_base_pairs(base_pairs, tetrado_request):
                 base_pair_entity.edge3 = LwParser[base_pair["lw"][2]].value
                 base_pair_entity.edge5 = LwParser[base_pair["lw"][1]].value
                 base_pair_entity.stericity = LwParser[base_pair["lw"][0]].value
+                base_pair_entity.lw = base_pair["lw"]
                 base_pair_entity.canonical = base_pair["canonical"]
                 base_pair_entity.inTetrad = base_pair["inTetrad"]
                 base_pair_entity.save()
@@ -95,12 +97,11 @@ def add_nucleotides(nucleotides, tetrado_request):
             nucleotides_entity.number = nucleotide["number"]
             nucleotides_entity.symbol = nucleotide["shortName"]
             nucleotides_entity.symbol = nucleotide["shortName"]
-            nucleotides_entity.chain = nucleotide["chain"]
+            nucleotides_entity.chain = nucleotide.get("chain")
             nucleotides_entity.glycosidicBond = nucleotide["glycosidicBond"]
             nucleotides_entity.name = nucleotide["fullName"]
             nucleotides_entity.chi_angle = (
-                str(format("%.2f" % nucleotide["chi"])
-                    ) if "chi" in nucleotide else "-"
+                str(format("%.2f" % nucleotide["chi"])) if "chi" in nucleotide else "-"
             )
             nucleotides_entity.molecule = nucleotide["molecule"]
             nucleotides_entity.save()
@@ -179,8 +180,7 @@ def add_loops(loops, quadruplex_entity, user_request):
             quadruplex_entity_loop.save()
             for nucleotide in loop["nucleotides"]:
                 quadruplex_entity_loop.nucleotide.add(
-                    Nucleotide.objects.get(
-                        query_id=user_request.id, name=nucleotide)
+                    Nucleotide.objects.get(query_id=user_request.id, name=nucleotide)
                 )
             quadruplex_entity_loop.save()
             quadruplex_entity.loop.add(quadruplex_entity_loop)
@@ -251,7 +251,10 @@ def add_quadruplexes(quadruplexes, file_data, helice_entity, user_request, cif=F
                 quadruplex_entity.molecule = ""
             add_loops(quadruplex["loops"], quadruplex_entity, user_request)
             add_tetrads(
-                quadruplex["tetrads"], quadruplex_entity, user_request, cif,
+                quadruplex["tetrads"],
+                quadruplex_entity,
+                user_request,
+                cif,
             )
             chains = []
             for tetrad in quadruplex_entity.tetrad.all():
@@ -305,6 +308,21 @@ def file_downloader(request_key: str, url: str, file_destination):
             break
 
 
+def try_download_file(
+    request_key: str, url: str, file_destination, user_request, label: str
+):
+    try:
+        file_downloader(request_key, url, file_destination)
+        return True
+    except Exception:
+        Log.objects.create(
+            type=f"Warning [download_{label}] ",
+            info=str(user_request.id),
+            traceback=traceback.format_exc(),
+        ).save()
+        return False
+
+
 def parse_result_from_backend(user_request, request_key: str):
     try:
         user_request.elTetradoKey = request_key
@@ -347,8 +365,7 @@ def parse_result_from_backend(user_request, request_key: str):
 
         user_request.save()
         while True:
-            r = requests.get(WEBTETRADO_BACKEND_URL +
-                             "/v1/result/" + request_key)
+            r = requests.get(WEBTETRADO_BACKEND_URL + "/v1/result/" + request_key)
             if r.status_code == 200:
                 result = json.loads(r.content)
 
@@ -364,8 +381,7 @@ def parse_result_from_backend(user_request, request_key: str):
                         user_request,
                         user_request.file_extension == "cif",
                     )
-                    add_tetrad_pairs(
-                        helice["tetradPairs"], helice_entity, user_request)
+                    add_tetrad_pairs(helice["tetradPairs"], helice_entity, user_request)
                     user_request.helice.add(helice_entity)
                 add_base_pairs(result["basePairs"], user_request)
                 user_request.dot_bracket_line1 = result["dotBracket"]["line1"]
@@ -382,52 +398,71 @@ def parse_result_from_backend(user_request, request_key: str):
                     if canonical and non_canonical:
                         break
 
-                file_downloader(
+                try_download_file(
                     request_key,
                     "/v1/varna/" + request_key + "?canonical=false&non-canonical=false",
                     user_request.varna,
+                    user_request,
+                    "varna",
                 )
                 if canonical:
-                    file_downloader(
+                    try_download_file(
                         request_key,
-                        "/v1/varna/" + request_key + "?canonical=true&non-canonical=false",
+                        "/v1/varna/"
+                        + request_key
+                        + "?canonical=true&non-canonical=false",
                         user_request.varna_can,
+                        user_request,
+                        "varna_can",
                     )
                 if non_canonical:
-                    file_downloader(
+                    try_download_file(
                         request_key,
-                        "/v1/varna/" + request_key + "?canonical=false&non-canonical=true",
+                        "/v1/varna/"
+                        + request_key
+                        + "?canonical=false&non-canonical=true",
                         user_request.varna_non_can,
+                        user_request,
+                        "varna_non_can",
                     )
                 if canonical and non_canonical:
-                    file_downloader(
+                    try_download_file(
                         request_key,
-                        "/v1/varna/" + request_key + "?canonical=true&non-canonical=true",
+                        "/v1/varna/"
+                        + request_key
+                        + "?canonical=true&non-canonical=true",
                         user_request.varna_can_non_can,
+                        user_request,
+                        "varna_can_non_can",
                     )
 
-                file_downloader(
+                try_download_file(
                     request_key,
                     "/v1/r-chie/" + request_key + "?canonical=false",
                     user_request.r_chie,
+                    user_request,
+                    "r_chie",
                 )
                 if canonical:
-                    file_downloader(
+                    try_download_file(
                         request_key,
                         "/v1/r-chie/" + request_key + "?canonical=true",
                         user_request.r_chie_canonical,
+                        user_request,
+                        "r_chie_canonical",
                     )
-                file_downloader(
+                try_download_file(
                     request_key,
                     "/v1/draw-tetrado/" + request_key,
                     user_request.draw_tetrado,
+                    user_request,
+                    "draw_tetrado",
                 )
 
                 user_request.status = 4
                 user_request.save()
 
-                user_request.cached_result = compose_json_result(
-                    user_request.id)
+                user_request.cached_result = compose_json_result(user_request.id)
                 user_request.save()
                 payload = {
                     "image": "https://webtetrado.cs.put.poznan.pl/static/logo.svg",
@@ -456,6 +491,7 @@ def parse_result_from_backend(user_request, request_key: str):
         user_request.status = 5
         user_request.error = "ElTetrado processor error."
         user_request.save()
+        logging.error(traceback.format_exc())
         Log.objects.create(
             type="Error [parsing] ",
             info=str(user_request.id),
@@ -466,39 +502,64 @@ def parse_result_from_backend(user_request, request_key: str):
 
 
 def add_task_to_queue(user_request):
-    base64file = base64.b64encode(
-        (open(user_request.structure_body.path, "rb").read()))
-    r = requests.post(
-        WEBTETRADO_BACKEND_URL + "/v1/structure",
-        data=json.dumps(
-            {
-                "pdb_mmcif_b64": str(base64file.decode("utf-8")),
-                "strict": user_request.strict,
-                "stackingMismatch": user_request.stacking_mismatch,
-                "noReorder": user_request.no_reorder,
-                "complete2D": user_request.complete_2d,
-                "model": user_request.model,
-            }
-        ),
-        headers={"Content-Type": "application/json"},
-    )
     try:
+        with open(user_request.structure_body.path, "rb") as structure_file:
+            base64file = base64.b64encode(structure_file.read())
+
+        r = requests.post(
+            WEBTETRADO_BACKEND_URL + "/v1/structure",
+            data=json.dumps(
+                {
+                    "pdb_mmcif_b64": str(base64file.decode("utf-8")),
+                    "noReorder": user_request.no_reorder,
+                    "analyzer": user_request.analyzer,
+                    "model": user_request.model,
+                }
+            ),
+            headers={"Content-Type": "application/json"},
+            timeout=60,
+        )
+
         begin = time.time()
 
         while r.status_code != 200:
             if time.time() - begin > 60:
-                user_request = 5
+                user_request.status = 5
+                user_request.error = (
+                    "Timed out waiting for WebTetrado backend task creation."
+                )
+                user_request.save()
+                return False
+            if r.status_code >= 400:
+                user_request.status = 5
+                try:
+                    error_payload = r.json()
+                    user_request.error = error_payload.get(
+                        "errorMessage", "Failed to create WebTetrado backend task."
+                    )
+                except Exception:
+                    user_request.error = f"Failed to create WebTetrado backend task: HTTP {r.status_code}"
+                user_request.save()
                 return False
             time.sleep(2)
 
         if r.status_code == 200:
-            request_key = json.loads(r.content)["structureId"]
+            payload = json.loads(r.content)
+            request_key = payload.get("structureId") or payload.get("structure_id")
+            if not request_key:
+                user_request.status = 5
+                user_request.error = f"Failed to read WebTetrado backend task id: {json.dumps(payload)[:900]}"
+                user_request.save()
+                return False
             return parse_result_from_backend(user_request, request_key)
         else:
-            return "Failed to get eltetrado id"
+            user_request.status = 5
+            user_request.error = "Failed to create WebTetrado backend task."
+            user_request.save()
+            return False
     except Exception:
         user_request.status = 5
-        user_request.error = "Unknown server failure."
+        user_request.error = traceback.format_exc().splitlines()[-1][:1000]
 
         Log.objects.create(
             type="Error [processing] ",

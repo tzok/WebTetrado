@@ -33,11 +33,9 @@ class TetradoRequest(admin.ModelAdmin):
         "structure_body",
         "hash_id",
         "draw_tetrado",
-        "complete_2d",
         "no_reorder",
-        "stacking_mismatch",
-        "strict",
         "model",
+        "analyzer",
         "elTetradoKey",
     )
 
@@ -117,4 +115,3 @@ class PushInfoAdmin(admin.ModelAdmin):
 @admin.register(Log)
 class Log(admin.ModelAdmin):
     list_display = ("type", "info", "timestamp")
-

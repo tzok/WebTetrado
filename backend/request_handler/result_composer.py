@@ -1,8 +1,17 @@
-
-from re import T
 from backend.models import Nucleotide, TetradoRequest
 from datetime import timedelta
 import json
+
+
+ANALYZER_LABELS = {
+    "INTERNAL": "RNApolis Annotator",
+    "RNAVIEW": "RNAView",
+    "FR3D": "FR3D",
+    "MAXIT": "MAXIT",
+    "MC_ANNOTATE": "MC-Annotate",
+    "BARNABA": "Barnaba",
+    "BPNET": "BPNet",
+}
 
 
 def compose_json_result(id: int):
@@ -18,6 +27,9 @@ def compose_json_result(id: int):
             + '"}'
         )
     result["name"] = tetrado_request.name
+    result["analyzer"] = ANALYZER_LABELS.get(
+        tetrado_request.analyzer, tetrado_request.analyzer
+    )
     result["status"] = tetrado_request.status
     result["structure_method"] = tetrado_request.structure_method
     result["idcode"] = tetrado_request.idcode
@@ -26,7 +38,9 @@ def compose_json_result(id: int):
     result["dot_bracket"]["line2"] = tetrado_request.dot_bracket_line2
     result["dot_bracket"]["sequence"] = tetrado_request.dot_bracket_sequence
     result["g4_limited"] = tetrado_request.g4_limited
-    result["structure_file"] = tetrado_request.structure_body.url if tetrado_request.structure_body else ''
+    result["structure_file"] = (
+        tetrado_request.structure_body.url if tetrado_request.structure_body else ""
+    )
     if tetrado_request.varna:
         result["varna"] = tetrado_request.varna.url
     else:
@@ -66,11 +80,9 @@ def compose_json_result(id: int):
     for base_pair in tetrado_request.base_pair.all():
         base_pair_single = {}
         base_pair_single["number"] = counter
-        base_pair_single["edge3"] = base_pair.edge3
-        base_pair_single["edge5"] = base_pair.edge5
         base_pair_single["nt1"] = base_pair.nt1.name
         base_pair_single["nt2"] = base_pair.nt2.name
-        base_pair_single["stericity"] = base_pair.stericity
+        base_pair_single["lw"] = base_pair.lw
         base_pair_single["in_tetrad"] = base_pair.inTetrad
         result["base_pairs"].append(base_pair_single)
         counter += 1
@@ -87,12 +99,10 @@ def compose_json_result(id: int):
             quadruplex_single["molecule"] = quadruplex.molecule
             quadruplex_single["onz_class"] = quadruplex.metadata.onz_class
             quadruplex_single["type"] = quadruplex.type
-            quadruplex_single[
-                "tetrad_combination"
-            ] = quadruplex.metadata.tetrad_combination
-            quadruplex_single[
-                "loopClassification"
-            ] = quadruplex.loop_classification
+            quadruplex_single["tetrad_combination"] = (
+                quadruplex.metadata.tetrad_combination
+            )
+            quadruplex_single["loopClassification"] = quadruplex.loop_classification
             quadruplex_single["tetrads_no"] = quadruplex.tetrad.count()
             quadruplex_single["tetrad"] = []
             quadruplex_single["chi_angle_value"] = []
@@ -101,9 +111,9 @@ def compose_json_result(id: int):
                 tetrad_quadruplex_single = {}
                 tetrad_quadruplex_single["number"] = counter_tetrad
                 tetrad_quadruplex_single["name"] = tetrad.name
-                tetrad_quadruplex_single[
-                    "gbaClassification"
-                ] = tetrad.metadata.tetrad_combination
+                tetrad_quadruplex_single["gbaClassification"] = (
+                    tetrad.metadata.tetrad_combination
+                )
                 tetrad_quadruplex_single["nucleotides"] = [
                     tetrad.nt1.name,
                     tetrad.nt2.name,

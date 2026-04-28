@@ -12,7 +12,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 frontend/src/assets/css/
-frontend/package-lock.json
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 static/
@@ -179,7 +179,7 @@ sketch
 .history
 .ionide
 # Support for Project snippet scope
-**/package-lock.json
+
 **/molstar.css
 # End of https://www.toptal.com/developers/gitignore/api/react,node,visualstudiocode
 !frontend/src/assets/css/molstar.css
@@ -192,3 +192,4 @@ ssl/
 ssl/
 frontend/src/config.json
 frontend/dist/
+.aider*

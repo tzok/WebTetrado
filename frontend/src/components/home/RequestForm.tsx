@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   message,
+  Select,
   Slider,
   Spin,
   Switch,
@@ -14,6 +15,8 @@ import { useEffect, useState } from "react";
 import { UseAppContext } from "../../AppContextProvider";
 import lang from "../../lang.json";
 import { request_form_values } from "../../types/RestultSet";
+import { analyzer_option } from "../../types/RestultSet";
+import { fetchAnalyzers } from "../../utils/adapters/fetchAnalyzers";
 import { checkRcsbMaxModel } from "../../utils/adapters/checkRcsbMaxModel";
 import { processingRequest } from "../../utils/adapters/processingRequest";
 import UploadStructureFile from "./UploadStructureFile";
@@ -22,14 +25,12 @@ const { Panel } = Collapse;
 export default function RequestForm() {
   const context = UseAppContext();
   let form_values: request_form_values = {
+    analyzer: "INTERNAL",
     fileId: "",
     rcsbPdbId: "",
     settings: {
-      complete2d: false,
       reorder: true,
-      stackingMatch: 2,
       g4Limited: true,
-      strict: false,
       model: 1,
     },
   };
@@ -38,6 +39,7 @@ export default function RequestForm() {
   const [pdbError, setPDBError] = useState(false);
   const [maxModelQuery, setMaxModelQuery] = useState(false);
   const [formValues, setFormValues] = useState(form_values);
+  const [analyzers, setAnalyzers] = useState<analyzer_option[]>([]);
   const [fileListState, setFileList] = useState<UploadFile[] | undefined>(
     undefined
   );
@@ -50,19 +52,22 @@ export default function RequestForm() {
       return null;
     }
 
-    if (Number.isNaN(formValues.settings.stackingMatch)) {
-      formValues.settings.stackingMatch = 2;
-    }
-    if (
-      formValues.settings.stackingMatch < 1 &&
-      formValues.settings.stackingMatch > 2
-    ) {
-      message.error(lang.wrong_value + "stacking match.");
-      return null;
-    }
     setLoading(true);
     processingRequest(formValues, setLoading);
   };
+  useEffect(() => {
+    fetchAnalyzers()
+      .then((response) => setAnalyzers(response.filter((item) => item.enabled)))
+      .catch(() =>
+        setAnalyzers([
+          { id: "INTERNAL", label: "RNApolis Annotator", enabled: true },
+          { id: "RNAVIEW", label: "RNAView", enabled: true },
+          { id: "FR3D", label: "FR3D", enabled: true },
+          { id: "MC_ANNOTATE", label: "MC-Annotate", enabled: true },
+          { id: "BPNET", label: "BPNet", enabled: true },
+        ])
+      );
+  }, []);
   useEffect(() => {
     if (formValues.fileId === "") setMaxModel(0);
 
@@ -307,6 +312,21 @@ export default function RequestForm() {
             <Panel header="Additional settings" key="1">
               <Form.Item>
                 <div className="horizontal-item-center">
+                  <div className="item-label">
+                    <Tooltip title={'Select which base-pair analyzer should be used before quadruplex detection'}>
+                      Base-pair analyzer:
+                    </Tooltip>
+                  </div>
+                  <Select
+                    style={{ width: "calc(50% - 5px)", maxWidth: "260px" }}
+                    value={formValues.analyzer}
+                    options={analyzers.map((item) => ({ value: item.id, label: item.label }))}
+                    onChange={(value) => setFormValues({ ...formValues, analyzer: value })}
+                  />
+                </div>
+              </Form.Item>
+              <Form.Item>
+                <div className="horizontal-item-center">
                   <div
                     className="item-label"
                     style={
@@ -382,91 +402,6 @@ export default function RequestForm() {
                         },
                       })
                     }
-                  />
-                </div>
-              </Form.Item>
-              <Form.Item valuePropName="checked">
-                <div className="horizontal-item-center">
-                  <div className="item-label">
-                    <Tooltip
-                      title="Nucleotides in tetrad are found when linked only by
-                        cWH pairing"
-                    >
-                      Detect tetrads with cWH pairings only:{" "}
-                    </Tooltip>
-                  </div>
-                  <Switch
-                    size={
-                      !context.viewSettings.isCompressedViewNeeded
-                        ? "default"
-                        : "small"
-                    }
-                    checkedChildren="Yes"
-                    unCheckedChildren="No"
-                    onChange={() =>
-                      setFormValues({
-                        ...formValues,
-                        settings: {
-                          ...formValues.settings,
-                          strict: !formValues.settings.strict,
-                        },
-                      })
-                    }
-                  />
-                </div>
-              </Form.Item>
-              <Form.Item>
-                <div className="horizontal-item-center">
-                  <div
-                    className="item-label"
-                    style={
-                      !context.viewSettings.isCompressedViewNeeded
-                        ? { padding: "5px 0" }
-                        : {}
-                    }
-                  >
-                    <Tooltip
-                      title="A perfect tetrad stacking covers 4 nucleotides; this
-                        option can be used with value 1 or 2 to allow this
-                        number of nucleotides to be non-stacked with otherwise
-                        well aligned tetrad"
-                    >
-                      Accept stacking mismatch for how many nts:
-                    </Tooltip>
-                  </div>
-                  <Input
-                    style={{ width: "calc(50% - 5px)", maxWidth: "100px" }}
-                    size={
-                      !context.viewSettings.isCompressedViewNeeded
-                        ? "middle"
-                        : "small"
-                    }
-                    type={"number"}
-                    min="0"
-                    max="4"
-                    value={formValues.settings.stackingMatch}
-                    onChange={(e) => {
-                      if (
-                        e.target.valueAsNumber > 4 ||
-                        e.target.valueAsNumber < 0
-                      ) {
-                        setFormValues({
-                          ...formValues,
-                          settings: {
-                            ...formValues.settings,
-                            stackingMatch: 1,
-                          },
-                        });
-                      } else {
-                        setFormValues({
-                          ...formValues,
-                          settings: {
-                            ...formValues.settings,
-                            stackingMatch: e.target.valueAsNumber,
-                          },
-                        });
-                      }
-                    }}
                   />
                 </div>
               </Form.Item>

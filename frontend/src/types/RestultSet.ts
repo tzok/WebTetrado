@@ -1,10 +1,9 @@
 export type base_pair = {
   number: number;
-  edge3: string;
-  edge5: string;
   nt1: string;
   nt2: string;
-  stericity: string;
+  lw: string;
+  in_tetrad: boolean;
 };
 
 export type chi_angle_value = {
@@ -66,6 +65,7 @@ export type helice = {
   tetrad_pairs: tetrad_pair[];
 };
 export type result_values = {
+  analyzer: string;
   name: string;
   dot_bracket: dot_bracket_values;
   status: number;
@@ -98,14 +98,18 @@ export type visualsation_switch_result = {
   r_chie_canonical: boolean;
 };
 export type request_form_values = {
+  analyzer: string;
   fileId: string;
   rcsbPdbId: string;
   settings: {
-    complete2d: boolean;
     reorder: boolean;
-    stackingMatch: number;
     g4Limited: boolean;
-    strict: boolean;
     model: number;
   };
+};
+
+export type analyzer_option = {
+  id: string;
+  label: string;
+  enabled: boolean;
 };

@@ -18,87 +18,93 @@ env = environ.Env()
 # reading .env file
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY", default=environ.NoValue())
-DEBUG = env("DEBUG", default=True)
-ALLOWED_HOSTS = ['webtetrado.cs.put.poznan.pl','127.0.0.1','localhost',"web","150.254.30.189"]
+DEBUG = env.bool("DEBUG", default=True)
+ALLOWED_HOSTS = [
+    "webtetrado.cs.put.poznan.pl",
+    "127.0.0.1",
+    "localhost",
+    "web",
+    "150.254.30.189",
+]
 CSRF_COOKIE_NAME = "csrftoken"
-CSRF_TRUSTED_ORIGINS = ['https://webtetrado.cs.put.poznan.pl']
-PROTECTED_MEDIA_FOLDERS=['uploads']
- 
+CSRF_TRUSTED_ORIGINS = ["https://webtetrado.cs.put.poznan.pl"]
+PROTECTED_MEDIA_FOLDERS = ["uploads"]
+
 # Application definition
-DATA_UPLOAD_MAX_NUMBER_FIELDS=10000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_celery_beat',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django_celery_beat",
     "django_rq",
-    'backend',
+    "backend",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'WebTetrado.middleware.RestrictMediaFolders.RestrictMediaFolders'
-    ]
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    #    'corsheaders.middleware.CorsMiddleware',
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "WebTetrado.middleware.RestrictMediaFolders.RestrictMediaFolders",
+]
 
-ROOT_URLCONF = 'WebTetrado.urls'
+ROOT_URLCONF = "WebTetrado.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": ["./templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'WebTetrado.wsgi.application'
+WSGI_APPLICATION = "WebTetrado.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 if DEBUG:
-    WEBTETRADO_BACKEND_URL = 'http://localhost:8080'
+    WEBTETRADO_BACKEND_URL = "http://localhost:8080"
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 else:
-    WEBTETRADO_BACKEND_URL = 'http://webtetrado_backend:8080'
+    WEBTETRADO_BACKEND_URL = "http://webtetrado_backend:8080"
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': env('POSTGRES_DB'),
-            'USER': env('POSTGRES_USER'),
-            'PASSWORD': env('POSTGRES_PASSWORD'),
-            'HOST': 'db',
-            'PORT': '',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": env("POSTGRES_DB"),
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "HOST": "db",
+            "PORT": "",
         }
     }
 
@@ -108,37 +114,37 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': str(BASE_DIR)+'/debug.log',
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": str(BASE_DIR) + "/debug.log",
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file','console'],
-            'level': 'ERROR',
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["file", "console"],
+            "level": "ERROR",
+            "propagate": True,
         },
     },
 }
@@ -146,9 +152,9 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'CET'
+TIME_ZONE = "CET"
 
 USE_I18N = True
 
@@ -158,74 +164,73 @@ USE_TZ = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # celery repetetive task config
 
 if DEBUG:
-    REDIS_HOST = '127.0.0.1'
-    CELERY_BROKER_URL = 'redis://'+REDIS_HOST+':6379'
-    CELERY_RESULT_BACKEND = 'redis://'+REDIS_HOST+':6379'
+    REDIS_HOST = "127.0.0.1"
+    CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":6379"
+    CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":6379"
     CELERY_TASK_TRACK_STARTED = True
-    CELERY_CACHE_BACKEND = 'default'
+    CELERY_CACHE_BACKEND = "default"
 else:
-    REDIS_HOST = 'redis'
-    CELERY_BROKER_URL = 'redis://'+REDIS_HOST
-    CELERY_RESULT_BACKEND = 'redis://'+REDIS_HOST
+    REDIS_HOST = "redis"
+    CELERY_BROKER_URL = "redis://" + REDIS_HOST
+    CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST
     CELERY_TASK_TRACK_STARTED = True
-    CELERY_CACHE_BACKEND = 'default'
+    CELERY_CACHE_BACKEND = "default"
 
 
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
-        'LOCATION': REDIS_HOST+':6379',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'MAX_ENTRIES': 5000,
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://" + REDIS_HOST + ":6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "MAX_ENTRIES": 5000,
         },
     },
-
 }
 # REDIS server config
 RQ = {
-    'host': REDIS_HOST,
-    'db': 0,
+    "host": REDIS_HOST,
+    "db": 0,
 }
 RQ_QUEUES = {
-    'default': {
-        'HOST': REDIS_HOST,
-        'PORT': 6379,
-        'DB': 0,
-        'PASSWORD': '',
-        'DEFAULT_TIMEOUT': 86400,
-        'USE_REDIS_CACHE': 'default',
+    "default": {
+        "HOST": REDIS_HOST,
+        "PORT": 6379,
+        "DB": 0,
+        "PASSWORD": "",
+        "DEFAULT_TIMEOUT": 86400,
+        "USE_REDIS_CACHE": "default",
     },
 }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-MEDIA_ROOT = str(BASE_DIR) + '/media/'
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
-REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
+MEDIA_ROOT = str(BASE_DIR) + "/media/"
+MEDIA_URL = "/media/"
+STATIC_URL = "/static/"
+REACT_APP_DIR = os.path.join(BASE_DIR, "frontend")
 
 if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     STATICFILES_DIRS = [
-        os.path.join(REACT_APP_DIR, 'dist'),
+        os.path.join(REACT_APP_DIR, "dist"),
     ]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     STATICFILES_DIRS = [
-        os.path.join(REACT_APP_DIR, 'dist'),
+        os.path.join(REACT_APP_DIR, "dist"),
     ]
 
 FRONTEND_LOCATION = os.path.join(STATIC_ROOT, "index.html")
 
 WEBPUSH_SETTINGS = {
-   "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY', default=environ.NoValue()),
-   "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY', default=environ.NoValue()),
-   "VAPID_ADMIN_EMAIL": env('VAPID_EMAIL', default=environ.NoValue())
+    "VAPID_PUBLIC_KEY": env("VAPID_PUBLIC_KEY", default=environ.NoValue()),
+    "VAPID_PRIVATE_KEY": env("VAPID_PRIVATE_KEY", default=environ.NoValue()),
+    "VAPID_ADMIN_EMAIL": env("VAPID_EMAIL", default=environ.NoValue()),
 }

@@ -1,6 +1,7 @@
 {
     "name": "",
     "status": 4,
+    "analyzer": "RNApolis Annotator",
     "structure_method": "",
     "idcode": "",
     "dot_bracket": {
@@ -20,147 +21,115 @@
     "base_pairs": [
         {
             "number": 1,
-            "edge3": "Watson-Crick-Franklin",
-            "edge5": "Hoogsteen",
             "nt1": "A.DG1",
             "nt2": "A.DG7",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cHW"
         },
         {
             "number": 2,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG1",
             "nt2": "A.DG16",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 3,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG2",
             "nt2": "A.DG6",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 4,
-            "edge3": "Watson-Crick-Franklin",
-            "edge5": "Hoogsteen",
             "nt1": "A.DG2",
             "nt2": "A.GF2/15",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cHW"
         },
         {
             "number": 5,
-            "edge3": "Hoogsteen",
-            "edge5": "Sugar",
             "nt1": "A.DG3",
             "nt2": "A.DT5",
-            "stericity": "cis",
-            "in_tetrad": false
+            "in_tetrad": false,
+            "lw": "cSH"
         },
         {
             "number": 6,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG6",
             "nt2": "A.DG20",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 7,
-            "edge3": "Watson-Crick-Franklin",
-            "edge5": "Hoogsteen",
             "nt1": "A.DG7",
             "nt2": "A.DG21",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cHW"
         },
         {
             "number": 8,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG8",
             "nt2": "A.GF2/14",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 9,
-            "edge3": "Watson-Crick-Franklin",
-            "edge5": "Hoogsteen",
             "nt1": "A.DG8",
             "nt2": "A.DG22",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cHW"
         },
         {
             "number": 10,
-            "edge3": "Hoogsteen",
-            "edge5": "Sugar",
             "nt1": "A.DA11",
             "nt2": "A.DC12",
-            "stericity": "cis",
-            "in_tetrad": false
+            "in_tetrad": false,
+            "lw": "cSH"
         },
         {
             "number": 11,
-            "edge3": "Sugar",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DC12",
             "nt2": "A.DG22",
-            "stericity": "trans",
-            "in_tetrad": false
+            "in_tetrad": false,
+            "lw": "tWS"
         },
         {
             "number": 12,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.GF2/14",
             "nt2": "A.DG17",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 13,
-            "edge3": "Watson-Crick-Franklin",
-            "edge5": "Hoogsteen",
             "nt1": "A.GF2/15",
             "nt2": "A.DG20",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cHW"
         },
         {
             "number": 14,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG16",
             "nt2": "A.DG21",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         },
         {
             "number": 15,
-            "edge3": "Sugar",
-            "edge5": "Sugar",
             "nt1": "A.DG17",
             "nt2": "A.DA18",
-            "stericity": "trans",
-            "in_tetrad": false
+            "in_tetrad": false,
+            "lw": "tSS"
         },
         {
             "number": 16,
-            "edge3": "Hoogsteen",
-            "edge5": "Watson-Crick-Franklin",
             "nt1": "A.DG17",
             "nt2": "A.DG22",
-            "stericity": "cis",
-            "in_tetrad": true
+            "in_tetrad": true,
+            "lw": "cWH"
         }
     ],
     "helices": [

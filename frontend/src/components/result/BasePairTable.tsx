@@ -19,21 +19,6 @@ export default function BasePairTable(props: BasePairTableArguents) {
             },
         },
         {
-            title: "Stericity",
-            dataIndex: "stericity",
-            key: "stericity",
-        },
-        {
-            title: "3'-edge",
-            dataIndex: "edge3",
-            key: "edge3",
-        },
-        {
-            title: "5'-edge",
-            dataIndex: "edge5",
-            key: "edge5",
-        },
-        {
             title: "Nucleotide 1",
             dataIndex: "nt1",
             key: "nt1",
@@ -42,6 +27,11 @@ export default function BasePairTable(props: BasePairTableArguents) {
             title: "Nucleotide 2",
             dataIndex: "nt2",
             key: "nt2",
+        },
+        {
+            title: "Leontis-Westhof notation",
+            dataIndex: "lw",
+            key: "lw",
         },
         {
             title: "In tetrad",
@@ -72,7 +62,7 @@ export default function BasePairTable(props: BasePairTableArguents) {
                 }
             />
             <div className="horizontal-center">
-                {JsonToCsvButton(props.value, ['number', 'stericity', 'edge3', 'edge5', 'nt1', 'nt2', 'in_tetrad'], ['Number', 'Stericity', '3\'-edge', '5\'-edge', 'Nucleotide 1', 'Nucleotide 2', 'In tetrad'], 'base_pair_results')}
+                {JsonToCsvButton(props.value, ['number', 'nt1', 'nt2', 'lw', 'in_tetrad'], ['Number', 'Nucleotide 1', 'Nucleotide 2', 'Leontis-Westhof notation', 'In tetrad'], 'base_pair_results')}
             </div>
         </>
     );

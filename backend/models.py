@@ -3,6 +3,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 
+
 class Metadata(models.Model):
     onz_class = models.CharField(max_length=100, blank=True)
     tetrad_combination = models.CharField(max_length=100, blank=True)
@@ -13,7 +14,7 @@ class Nucleotide(models.Model):
     query_id = models.IntegerField()
     number = models.IntegerField()
     symbol = models.CharField(max_length=20)
-    chain = models.CharField(max_length=20)
+    chain = models.CharField(max_length=20, null=True, blank=True)
     glycosidicBond = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     chi_angle = models.CharField(max_length=20)
@@ -34,6 +35,7 @@ class BasePair(models.Model):
         to=Nucleotide, related_name="nucleotide_bp_2", on_delete=models.DO_NOTHING
     )
     stericity = models.CharField(max_length=50)
+    lw = models.CharField(max_length=3, default="")
     inTetrad = models.BooleanField(default=False)
     canonical = models.BooleanField(default=False)
 
@@ -82,6 +84,7 @@ class TetradPair(models.Model):
     rise = models.FloatField()
     twist = models.FloatField()
     strand_direction = models.CharField(max_length=100)
+
     def __str__(self):
         return str(self.tetrad1.name) + "-" + str(self.tetrad2.name)
 
@@ -91,8 +94,15 @@ class Loop(models.Model):
     length = models.IntegerField()
     type = models.CharField(max_length=50)
     nucleotide = models.ManyToManyField(Nucleotide)
+
     def __str__(self):
-        return str(self.id)+': '+str(self.length)+' '+'-'.join([n.name for n in self.nucleotide.all()])
+        return (
+            str(self.id)
+            + ": "
+            + str(self.length)
+            + " "
+            + "-".join([n.name for n in self.nucleotide.all()])
+        )
 
 
 class Quadruplex(models.Model):
@@ -110,6 +120,7 @@ class Quadruplex(models.Model):
     type = models.CharField(choices=COLOR_CHOICES, max_length=10, default="OTHER")
     molecule = models.CharField(max_length=100, blank=True)
     loop_classification = models.CharField(max_length=50, blank=True)
+
 
 class Helice(models.Model):
     id = models.AutoField(primary_key=True)
@@ -160,18 +171,18 @@ class TetradoRequest(models.Model):
     source = models.IntegerField(choices=Sources.choices)
     status = models.IntegerField(choices=Statuses.choices)
     structure_body = models.FileField(upload_to="files/structures/", blank=True)
-    structure_body_original = models.FileField(upload_to="files/structures_original/", blank=True)
+    structure_body_original = models.FileField(
+        upload_to="files/structures_original/", blank=True
+    )
     file_extension = models.CharField(max_length=20)
 
     dot_bracket_line1 = models.TextField(blank=True)
     dot_bracket_line2 = models.TextField(blank=True)
     dot_bracket_sequence = models.TextField(blank=True)
-    complete_2d = models.BooleanField()
     no_reorder = models.BooleanField()
-    stacking_mismatch = models.IntegerField()
-    strict = models.BooleanField()
     g4_limited = models.BooleanField()
     model = models.IntegerField(default=1)
+    analyzer = models.CharField(max_length=50, default="INTERNAL")
 
     name = models.CharField(max_length=200, blank=True)
     structure_method = models.CharField(max_length=200, blank=True)

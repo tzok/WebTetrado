@@ -13,64 +13,79 @@ class ResultParserTest(TestCase):
         httpretty.reset()
         return super().tearDown()
 
-    def setUpTest(self,name:str):
+    def setUpTest(self, name: str):
         httpretty.register_uri(
             method=httpretty.GET,
-            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/draw-tetrado/"+name,
+            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/draw-tetrado/" + name,
             status=200,
             body="",
         )
         httpretty.register_uri(
             method=httpretty.GET,
-            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/r-chie/"+name+"?canonical=false",
+            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/r-chie/" + name + "?canonical=false",
             status=200,
             body="",
         )
         httpretty.register_uri(
             method=httpretty.GET,
-            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/r-chie/"+name+"?canonical=true",
-            status=200,
-            body="",
-        )
-        httpretty.register_uri(
-            method=httpretty.GET,
-            uri=str(WEBTETRADO_BACKEND_URL)
-            + "/v1/varna/"+name+"?canonical=false&non-canonical=false",
+            uri=str(WEBTETRADO_BACKEND_URL) + "/v1/r-chie/" + name + "?canonical=true",
             status=200,
             body="",
         )
         httpretty.register_uri(
             method=httpretty.GET,
             uri=str(WEBTETRADO_BACKEND_URL)
-            + "/v1/varna/"+name+"?canonical=false&non-canonical=true",
+            + "/v1/varna/"
+            + name
+            + "?canonical=false&non-canonical=false",
             status=200,
             body="",
         )
         httpretty.register_uri(
             method=httpretty.GET,
             uri=str(WEBTETRADO_BACKEND_URL)
-            + "/v1/varna/"+name+"?canonical=true&non-canonical=false",
+            + "/v1/varna/"
+            + name
+            + "?canonical=false&non-canonical=true",
             status=200,
             body="",
         )
         httpretty.register_uri(
             method=httpretty.GET,
             uri=str(WEBTETRADO_BACKEND_URL)
-            + "/v1/varna/"+name+"?canonical=true&non-canonical=true",
+            + "/v1/varna/"
+            + name
+            + "?canonical=true&non-canonical=false",
             status=200,
             body="",
         )
-    def tetrad_file_residue_check(self,entity):
+        httpretty.register_uri(
+            method=httpretty.GET,
+            uri=str(WEBTETRADO_BACKEND_URL)
+            + "/v1/varna/"
+            + name
+            + "?canonical=true&non-canonical=true",
+            status=200,
+            body="",
+        )
+
+    def tetrad_file_residue_check(self, entity):
         io = MMCIFIO()
         for i in entity.helice.all():
             for j in i.quadruplex.all():
                 for k in j.tetrad.all():
-                    io.set_structure(MMCIFParser(QUIET=True).get_structure("str", k.tetrad_file.path))
-                    self.assertEqual(len(list(set([i.id[1] for i in io.structure.get_residues()]))),4,' '.join([str(i) for i in io.structure.get_residues()]))
+                    io.set_structure(
+                        MMCIFParser(QUIET=True).get_structure("str", k.tetrad_file.path)
+                    )
+                    self.assertEqual(
+                        len(list(set([i.id[1] for i in io.structure.get_residues()]))),
+                        4,
+                        " ".join([str(i) for i in io.structure.get_residues()]),
+                    )
 
     @httpretty.activate
     def test_get1JJP1_doParseToDatabase_resultSuccess(self):
-        self.setUpTest('code_1jjp')
+        self.setUpTest("code_1jjp")
         httpretty.register_uri(
             method=httpretty.GET,
             uri=str(WEBTETRADO_BACKEND_URL) + "/v1/result/" + "code_1jjp",
@@ -86,16 +101,19 @@ class ResultParserTest(TestCase):
         )
         entity = TetradoRequest()
         entity.no_reorder = False
-        entity.strict = False
-        entity.stacking_mismatch = 2
         entity.g4_limited = False
         entity.model = 1
         entity.status = 1
         entity.source = 1
         entity.file_extension = "cif"
-        entity.complete_2d = False
-        entity.structure_body.save(name="code_1jjp", content=open(str(BASE_DIR)+'/backend/tests/test_files/1jjp_1.cif','rb'))
-        entity.structure_body_original.save(name="code_1jjp",content=open(str(BASE_DIR)+'/backend/tests/test_files/1jjp.cif','rb'))
+        entity.structure_body.save(
+            name="code_1jjp",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/1jjp_1.cif", "rb"),
+        )
+        entity.structure_body_original.save(
+            name="code_1jjp",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/1jjp.cif", "rb"),
+        )
         entity.save()
         self.assertTrue(parse_result_from_backend(entity, "code_1jjp"))
         self.tetrad_file_residue_check(entity)
@@ -118,18 +136,21 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
-        entity.strict = False
-        entity.stacking_mismatch = 2
         entity.g4_limited = False
         entity.model = 1
         entity.status = 1
         entity.source = 1
         entity.file_extension = "cif"
         entity.save()
-        entity.structure_body.save(name= "code_2hy9",content=open(str(BASE_DIR)+'/backend/tests/test_files/2hy9_1.cif','rb'))
-        entity.structure_body_original.save(name= "code_2hy9",content=open(str(BASE_DIR)+'/backend/tests/test_files/2hy9.cif','rb'))
+        entity.structure_body.save(
+            name="code_2hy9",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/2hy9_1.cif", "rb"),
+        )
+        entity.structure_body_original.save(
+            name="code_2hy9",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/2hy9.cif", "rb"),
+        )
         self.assertTrue(parse_result_from_backend(entity, "code_2hy9"))
         self.tetrad_file_residue_check(entity)
         entity.delete()
@@ -151,17 +172,20 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
-        entity.strict = False
-        entity.stacking_mismatch = 2
         entity.g4_limited = False
         entity.model = 1
         entity.status = 1
         entity.source = 1
         entity.file_extension = "cif"
-        entity.structure_body.save(name="code_6rs3", content=open(str(BASE_DIR)+'/backend/tests/test_files/6rs3_1.cif','rb'))
-        entity.structure_body_original.save(name="code_6rs3",content=open(str(BASE_DIR)+'/backend/tests/test_files/6rs3.cif','rb'))
+        entity.structure_body.save(
+            name="code_6rs3",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/6rs3_1.cif", "rb"),
+        )
+        entity.structure_body_original.save(
+            name="code_6rs3",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/6rs3.cif", "rb"),
+        )
         entity.save()
         self.assertTrue(parse_result_from_backend(entity, "code_6rs3"))
         self.tetrad_file_residue_check(entity)
@@ -184,19 +208,21 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
-        entity.strict = False
-        entity.stacking_mismatch = 2
         entity.g4_limited = False
         entity.model = 1
         entity.status = 1
         entity.source = 1
         entity.file_extension = "cif"
-        entity.structure_body.save(name="code_6fc9",content=open(str(BASE_DIR)+'/backend/tests/test_files/6fc9_1.cif','rb'))
-        entity.structure_body_original.save(name="code_6fc9",content=open(str(BASE_DIR)+'/backend/tests/test_files/6fc9.cif','rb'))
+        entity.structure_body.save(
+            name="code_6fc9",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/6fc9_1.cif", "rb"),
+        )
+        entity.structure_body_original.save(
+            name="code_6fc9",
+            content=open(str(BASE_DIR) + "/backend/tests/test_files/6fc9.cif", "rb"),
+        )
         entity.save()
         self.assertTrue(parse_result_from_backend(entity, "code_6fc9"))
         self.tetrad_file_residue_check(entity)
         entity.delete()
-

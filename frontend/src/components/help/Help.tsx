@@ -36,12 +36,11 @@ export const Help = () => {
           <div>
             <h3 id={"home_paragraph"}>1.1. Homepage and input data</h3>
             <p>The main page of WebTetrado allows users to define and launch a new task (calculations for a given DNA/RNA structure) and check the results of a task already completed.  Launching a new task involves loading a single data file containing the atomic coordinates of a nucleic acid molecule, setting input parameters (optional), and clicking the "Submit task" button. The system accepts input files in PDB and mmCIF formats. They can be uploaded from a designated location (such as a local drive) or directly from the Protein Data Bank (Berman et al., 2000). In the latter case, all you need to do is provide the PDB ID of the structure, and the system will download it itself. New users of WebTetrado can also use the available examples to familiarize themselves with how the system works. In this scenario, select an example and click the "Submit task" button.</p>
-            <p>After uploading the tertiary structure file, users can set additional parameters that condition the analysis of the input data and affect the result of their processing. WebTetrado allows setting the following five parameters on the "Additional settings" panel:</p>
+            <p>After uploading the tertiary structure file, users can set additional parameters that condition the analysis of the input data and affect the result of their processing. WebTetrado allows setting the following parameters on the "Additional settings" panel:</p>
             <ul>
+              <li>&#8226; "Base-pair analyzer" - select the tool used to annotate base pairs before quadruplex detection; different analyzers may produce different base-pair annotations and therefore different quadruplex results;</li>
               <li>&#8226; "Analyze the model with the number &lt;N&gt;" - if the input file includes more than one model of the structure, users can select which model to process;</li>
               <li>&#8226; "Highlight G-tetrads at the output" - tetrad is usually made of four guanines, however, other nucleotides can also participate in tetrad formation; WebTetrado can look for all tetrads or G-tetrads only depending on this setting;</li>
-              <li>&#8226; "Detect tetrads with cWH pairings only" - nucleotides in a tetrad usually interact through Watson-Crick-Franklin and Hoogsteen edges forming cis WH base pair conformations; strict definition of a tetrad involves only such pairings; however, other interactions may also contribute to tetrad formation; WebTetrado can detect tetrads according to strict definition or tetrads formed by any type of interactions;</li>
-              <li>&#8226; "Accept stacking mismatch for how many nts &lt;N&gt;" - a perfect tetrad stacking covers 4 nucleotides; this option can be used with value 1 or 2 to allow this number of nucleotides to be non-stacked with otherwise well-aligned tetrad;</li>
               <li>&#8226; "Reorder chains to enable ONZ" - chains of bi- and tetramolecular quadruplexes should be reordered to be able to have them classified according to ONZ; when this option is set, chains will be processed in the original order, which for bi-/tetramolecular means that they will likely be misclassified.</li>
             </ul>
             <table id={'additional_settings_table'} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -49,6 +48,11 @@ export const Help = () => {
                 <th>Additional settings</th>
                 <th>Default</th>
                 <th>Possible values</th>
+              </tr>
+              <tr>
+                <td>Base-pair analyzer</td>
+                <td>RNApolis Annotator</td>
+                <td>RNApolis Annotator, RNAView, FR3D, MAXIT, MC-Annotate, baRNAba, BPNet</td>
               </tr>
               <tr>
                 <td>Analyze the model with the number &lt;N&gt;</td>
@@ -59,16 +63,6 @@ export const Help = () => {
                 <td>Highlight G-tetrads at the output</td>
                 <td>Yes</td>
                 <td>Yes, No</td>
-              </tr>
-              <tr>
-                <td>Detect tetrads with cWH pairings only</td>
-                <td>No</td>
-                <td>Yes, No</td>
-              </tr>
-              <tr>
-                <td>Accept stacking mismatch for how many nts &lt;N&gt;</td>
-                <td>2</td>
-                <td>0, 1, 2, 3, 4</td>
               </tr>
               <tr>
                 <td>Reorder chains to enable ONZ</td>
@@ -102,7 +96,7 @@ export const Help = () => {
                 src={help_result_waiting}
               />
             </div>
-            <p>Once the calculation is completed, the page shows either a message about the failure to find a quadruplex in the structure or the structural data of the motif(s) found. In the latter case, the data is displayed hierarchically following the top-down order. If the input structure contains G4-helix, the system shows which quadruplexes are included in it. Next, the quadruplex-specific parameters are displayed, and then the parameters that were calculated for the tetrads that make up the quadruplex. Computed data include metadata (PDB ID, experiment, molecule type), classifications of tetrads and quadruplexes (by loop progression (Webba da Silva), chi angle (Webba da Silva), the relative orientation of the strands, base-pairing patterns (ONZ)), structure data (number of tetrads, sequences, tetrad planarity, loop lengths, loop types, chi angles, rise, twist, base pair types). WebTetrado also displays visualizations of the secondary structure (classic diagram, arc diagram), secondary-tertiary structure (layer diagram), and the tertiary structure (cartoon model).</p>
+            <p>Once the calculation is completed, the page shows either a message about the failure to find a quadruplex in the structure or the structural data of the motif(s) found. In the latter case, the data is displayed hierarchically following the top-down order. If the input structure contains G4-helix, the system shows which quadruplexes are included in it. Next, the quadruplex-specific parameters are displayed, and then the parameters that were calculated for the tetrads that make up the quadruplex. Computed data include metadata (PDB ID, experiment, molecule type, base-pair analyzer used), classifications of tetrads and quadruplexes (by loop progression (Webba da Silva), chi angle (Webba da Silva), the relative orientation of the strands, base-pairing patterns (ONZ)), structure data (number of tetrads, sequences, tetrad planarity, loop lengths, loop types, chi angles, rise, twist, base pair types). WebTetrado also displays visualizations of the secondary structure (classic diagram, arc diagram), secondary-tertiary structure (layer diagram), and the tertiary structure (cartoon model).</p>
             <div className={"horizontal-center"}>
               <Image
                 alt={"infographic"}

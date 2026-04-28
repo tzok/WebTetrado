@@ -3,6 +3,15 @@ import { getCookie } from "../../components/CSRF";
 import config from "../../config.json";
 import fetch from "node-fetch";
 
+function getWebSocketUrl() {
+  if (config.SERVER_WEB_SOCKET_URL) {
+    return config.SERVER_WEB_SOCKET_URL;
+  }
+
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  return `${protocol}//${window.location.host}/ws/`;
+}
+
 export function processingResponse(
   orderId: any,
   setResultSet: any,
@@ -17,7 +26,7 @@ export function processingResponse(
       "X-CSRFToken": getCookie(),
     },
   };
-  let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL);
+  let socket = new WebSocket(getWebSocketUrl());
   let timer: any = null;
 
   socket.onopen = () => {
