@@ -1,3 +1,5 @@
+celery
+django-celery-beat
 Django
 biopython
 cryptography
