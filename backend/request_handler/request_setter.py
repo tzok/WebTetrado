@@ -18,8 +18,6 @@ def set_user_request_action(body: Dict):
     entity = TetradoRequest()
     entity.complete_2d = body["settings"]["complete2d"]
     entity.no_reorder = not body["settings"]["reorder"]
-    entity.strict = body["settings"]["strict"]
-    entity.stacking_mismatch = body["settings"]["stackingMatch"]
     entity.g4_limited = body["settings"]["g4Limited"]
     entity.model = body["settings"]["model"]
     entity.status = 1
@@ -32,8 +30,10 @@ def set_user_request_action(body: Dict):
                 temp_file = open(
                     os.path.join(
                         settings.BASE_DIR,
-                        "example_structure_files/" +
-                        file_name[1].split('/')[-1] + "." + file_name[2],
+                        "example_structure_files/"
+                        + file_name[1].split("/")[-1]
+                        + "."
+                        + file_name[2],
                     ),
                     "rb",
                 )
@@ -86,7 +86,7 @@ def set_user_request_action(body: Dict):
             filter_pdb_model(entity.structure_body.path, entity.model)
     except Exception:
         entity.status = 5
-        entity.error_message = "Model does not exist"
+        entity.error = "Model does not exist"
         entity.save()
         return HttpResponse(status=500)
 
@@ -96,6 +96,6 @@ def set_user_request_action(body: Dict):
     queue = django_rq.get_queue("default", is_async=True)
     queue.enqueue(add_task_to_queue, entity, retry=Retry(max=3))
     return HttpResponse(
-        content=b'{"orderId":"' + bytes(str(entity.hash_id), 'UTF-8') + b'"}',
+        content=b'{"orderId":"' + bytes(str(entity.hash_id), "UTF-8") + b'"}',
         content_type="application/json",
     )

@@ -103,9 +103,7 @@ export type request_form_values = {
   settings: {
     complete2d: boolean;
     reorder: boolean;
-    stackingMatch: number;
     g4Limited: boolean;
-    strict: boolean;
     model: number;
   };
 };

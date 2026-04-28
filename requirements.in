@@ -1,0 +1,15 @@
+Django
+biopython
+cryptography
+django-cors-headers
+django-environ
+django-redis-cache
+django-rq
+gunicorn
+httpretty
+psycopg2-binary
+pywebpush
+requests
+rq
+uvicorn
+websockets

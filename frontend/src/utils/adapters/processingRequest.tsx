@@ -10,8 +10,6 @@ type form_values = {
     settings: {
         complete2d: boolean;
         reorder: boolean;
-        stackingMatch: number;
-        strict: boolean;
         model: number;
     };
 };

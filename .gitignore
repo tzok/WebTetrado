@@ -192,3 +192,4 @@ ssl/
 ssl/
 frontend/src/config.json
 frontend/dist/
+.aider*
