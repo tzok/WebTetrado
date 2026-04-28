@@ -106,7 +106,6 @@ class ResultParserTest(TestCase):
         entity.status = 1
         entity.source = 1
         entity.file_extension = "cif"
-        entity.complete_2d = False
         entity.structure_body.save(
             name="code_1jjp",
             content=open(str(BASE_DIR) + "/backend/tests/test_files/1jjp_1.cif", "rb"),
@@ -137,7 +136,6 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
@@ -174,7 +172,6 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
@@ -211,7 +208,6 @@ class ResultParserTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1

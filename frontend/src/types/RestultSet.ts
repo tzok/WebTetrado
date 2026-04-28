@@ -101,7 +101,6 @@ export type request_form_values = {
   fileId: string;
   rcsbPdbId: string;
   settings: {
-    complete2d: boolean;
     reorder: boolean;
     g4Limited: boolean;
     model: number;

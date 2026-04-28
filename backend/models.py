@@ -178,7 +178,6 @@ class TetradoRequest(models.Model):
     dot_bracket_line1 = models.TextField(blank=True)
     dot_bracket_line2 = models.TextField(blank=True)
     dot_bracket_sequence = models.TextField(blank=True)
-    complete_2d = models.BooleanField()
     no_reorder = models.BooleanField()
     g4_limited = models.BooleanField()
     model = models.IntegerField(default=1)

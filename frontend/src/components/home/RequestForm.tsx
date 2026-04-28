@@ -25,7 +25,6 @@ export default function RequestForm() {
     fileId: "",
     rcsbPdbId: "",
     settings: {
-      complete2d: false,
       reorder: true,
       g4Limited: true,
       model: 1,

@@ -16,7 +16,6 @@ from backend.file_processor.structure_model_filter import (
 
 def set_user_request_action(body: Dict):
     entity = TetradoRequest()
-    entity.complete_2d = body["settings"]["complete2d"]
     entity.no_reorder = not body["settings"]["reorder"]
     entity.g4_limited = body["settings"]["g4Limited"]
     entity.model = body["settings"]["model"]

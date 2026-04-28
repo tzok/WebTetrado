@@ -8,7 +8,6 @@ type form_values = {
     fileId: string;
     rcsbPdbId: string;
     settings: {
-        complete2d: boolean;
         reorder: boolean;
         model: number;
     };

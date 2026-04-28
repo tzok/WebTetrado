@@ -33,7 +33,6 @@ class TetradoRequest(admin.ModelAdmin):
         "structure_body",
         "hash_id",
         "draw_tetrado",
-        "complete_2d",
         "no_reorder",
         "model",
         "elTetradoKey",

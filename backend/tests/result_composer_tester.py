@@ -86,7 +86,6 @@ class ResultComposerTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
@@ -123,7 +122,6 @@ class ResultComposerTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
@@ -160,7 +158,6 @@ class ResultComposerTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
@@ -197,7 +194,6 @@ class ResultComposerTest(TestCase):
             ),
         )
         entity = TetradoRequest()
-        entity.complete_2d = False
         entity.no_reorder = False
         entity.g4_limited = False
         entity.model = 1
