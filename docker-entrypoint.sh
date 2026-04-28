@@ -1,7 +1,7 @@
 #!/bin/sh
-python3 manage.py makemigrations;
-python3 manage.py makemigrations backend;
-python3 manage.py migrate;
+set -e
+
+python3 manage.py migrate --fake-initial --no-input;
 if [ ! -d /opt/webtetrado/supervisor ];
 then
     mkdir -p /opt/webtetrado/supervisor
