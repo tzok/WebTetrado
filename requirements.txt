@@ -8,7 +8,7 @@ asgiref==3.11.1
     # via
     #   django
     #   uvicorn
-biopython==1.79
+biopython==1.87
     # via -r requirements.in
 certifi==2026.4.22
     # via requests
