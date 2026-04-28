@@ -184,7 +184,7 @@ else:
 
 CACHES = {
     "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": REDIS_HOST + ":6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
