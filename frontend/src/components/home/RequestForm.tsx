@@ -63,9 +63,7 @@ export default function RequestForm() {
           { id: "INTERNAL", label: "RNApolis Annotator", enabled: true },
           { id: "RNAVIEW", label: "RNAView", enabled: true },
           { id: "FR3D", label: "FR3D", enabled: true },
-          { id: "MAXIT", label: "MAXIT", enabled: true },
           { id: "MC_ANNOTATE", label: "MC-Annotate", enabled: true },
-          { id: "BARNABA", label: "Barnaba", enabled: true },
           { id: "BPNET", label: "BPNet", enabled: true },
         ])
       );

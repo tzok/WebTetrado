@@ -14,7 +14,7 @@ class Nucleotide(models.Model):
     query_id = models.IntegerField()
     number = models.IntegerField()
     symbol = models.CharField(max_length=20)
-    chain = models.CharField(max_length=20)
+    chain = models.CharField(max_length=20, null=True, blank=True)
     glycosidicBond = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     chi_angle = models.CharField(max_length=20)

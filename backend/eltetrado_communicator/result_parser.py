@@ -1,3 +1,4 @@
+import logging
 import traceback
 import time
 import requests
@@ -96,7 +97,7 @@ def add_nucleotides(nucleotides, tetrado_request):
             nucleotides_entity.number = nucleotide["number"]
             nucleotides_entity.symbol = nucleotide["shortName"]
             nucleotides_entity.symbol = nucleotide["shortName"]
-            nucleotides_entity.chain = nucleotide["chain"]
+            nucleotides_entity.chain = nucleotide.get("chain")
             nucleotides_entity.glycosidicBond = nucleotide["glycosidicBond"]
             nucleotides_entity.name = nucleotide["fullName"]
             nucleotides_entity.chi_angle = (
@@ -490,6 +491,7 @@ def parse_result_from_backend(user_request, request_key: str):
         user_request.status = 5
         user_request.error = "ElTetrado processor error."
         user_request.save()
+        logging.error(traceback.format_exc())
         Log.objects.create(
             type="Error [parsing] ",
             info=str(user_request.id),
