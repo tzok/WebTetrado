@@ -1,10 +1,9 @@
 export type base_pair = {
   number: number;
-  edge3: string;
-  edge5: string;
   nt1: string;
   nt2: string;
-  stericity: string;
+  lw: string;
+  in_tetrad: boolean;
 };
 
 export type chi_angle_value = {

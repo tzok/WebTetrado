@@ -71,6 +71,7 @@ def add_base_pairs(base_pairs, tetrado_request):
                 base_pair_entity.edge3 = LwParser[base_pair["lw"][2]].value
                 base_pair_entity.edge5 = LwParser[base_pair["lw"][1]].value
                 base_pair_entity.stericity = LwParser[base_pair["lw"][0]].value
+                base_pair_entity.lw = base_pair["lw"]
                 base_pair_entity.canonical = base_pair["canonical"]
                 base_pair_entity.inTetrad = base_pair["inTetrad"]
                 base_pair_entity.save()

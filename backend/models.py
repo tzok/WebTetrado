@@ -35,6 +35,7 @@ class BasePair(models.Model):
         to=Nucleotide, related_name="nucleotide_bp_2", on_delete=models.DO_NOTHING
     )
     stericity = models.CharField(max_length=50)
+    lw = models.CharField(max_length=3, default="")
     inTetrad = models.BooleanField(default=False)
     canonical = models.BooleanField(default=False)
 

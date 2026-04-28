@@ -80,11 +80,9 @@ def compose_json_result(id: int):
     for base_pair in tetrado_request.base_pair.all():
         base_pair_single = {}
         base_pair_single["number"] = counter
-        base_pair_single["edge3"] = base_pair.edge3
-        base_pair_single["edge5"] = base_pair.edge5
         base_pair_single["nt1"] = base_pair.nt1.name
         base_pair_single["nt2"] = base_pair.nt2.name
-        base_pair_single["stericity"] = base_pair.stericity
+        base_pair_single["lw"] = base_pair.lw
         base_pair_single["in_tetrad"] = base_pair.inTetrad
         result["base_pairs"].append(base_pair_single)
         counter += 1
