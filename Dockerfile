@@ -27,5 +27,6 @@ COPY build/celery_beat_docker.conf /etc/supervisor/conf.d/
 COPY build/worker_supervisor.conf /etc/supervisor/conf.d/
 COPY build/ws_supervisor.conf /etc/supervisor/conf.d/
 COPY build/web_supervisor.conf /etc/supervisor/conf.d/
-RUN echo "files = /etc/supervisor/conf.d/*.conf" >> /etc/supervisord.conf
+RUN echo "files = /etc/supervisor/conf.d/*.conf" >> /etc/supervisord.conf \
+    && echo "nodaemon=true" >> /etc/supervisord.conf
 WORKDIR /opt/webtetrado

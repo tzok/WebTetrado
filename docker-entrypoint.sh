@@ -15,12 +15,6 @@ fi
 cd /opt/webtetrado/;
 python3 manage.py collectstatic --no-input;
 cp /opt/webtetrado/public/* /opt/webtetrado/static/
-supervisord -c /etc/supervisord.conf;
-
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@admin.com', 'admin') if User.objects.all().count()==0 else None" | python3 manage.py shell;
 
-
-while :
-do
-  sleep 10
-done
+exec supervisord -n -c /etc/supervisord.conf
