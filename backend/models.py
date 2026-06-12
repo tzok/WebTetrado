@@ -19,6 +19,7 @@ class Nucleotide(models.Model):
     name = models.CharField(max_length=100)
     chi_angle = models.CharField(max_length=20)
     molecule = models.CharField(max_length=50)
+    sugar_pucker = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -113,6 +114,11 @@ class Quadruplex(models.Model):
         ("OTHER", "other"),
     )
 
+    HANDEDNESS_CHOICES = (
+        ("right", "right"),
+        ("left", "left"),
+    )
+
     id = models.AutoField(primary_key=True)
     metadata = models.ForeignKey(to=Metadata, on_delete=models.CASCADE)
     tetrad = models.ManyToManyField(Tetrad)
@@ -120,6 +126,14 @@ class Quadruplex(models.Model):
     type = models.CharField(choices=COLOR_CHOICES, max_length=10, default="OTHER")
     molecule = models.CharField(max_length=100, blank=True)
     loop_classification = models.CharField(max_length=50, blank=True)
+    handedness = models.CharField(
+        choices=HANDEDNESS_CHOICES, max_length=10, blank=True, null=True
+    )
+    tetrad_polarities = models.TextField(blank=True, default="")
+    strand_polarities = models.TextField(blank=True, default="")
+    tracts = models.TextField(blank=True, default="")
+    path = models.TextField(blank=True, default="")
+    bulges = models.TextField(blank=True, default="")
 
 
 class Helice(models.Model):
@@ -179,6 +193,11 @@ class TetradoRequest(models.Model):
     dot_bracket_line1 = models.TextField(blank=True)
     dot_bracket_line2 = models.TextField(blank=True)
     dot_bracket_sequence = models.TextField(blank=True)
+    quadruplex_dot_bracket_sequence = models.TextField(blank=True)
+    quadruplex_dot_bracket_structure = models.TextField(blank=True)
+    quadruplex_dot_bracket_chi = models.TextField(blank=True)
+    quadruplex_dot_bracket_sugar = models.TextField(blank=True)
+    quadruplex_dot_bracket_loop = models.TextField(blank=True)
     no_reorder = models.BooleanField()
     g4_limited = models.BooleanField()
     model = models.IntegerField(default=1)

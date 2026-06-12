@@ -13,7 +13,7 @@ const ResultDescription = (props: ResultDescriptionArguments) => {
       bordered
       layout="horizontal"
       labelStyle={{ fontWeight: "bold", textAlign: "left" }}
-      contentStyle={{ whiteSpace: "nowrap" }}
+      contentStyle={{ whiteSpace: "normal" }}
       style={{ width: "100%" }}
     >
       {props.resultSet.idcode != "" ? (
@@ -50,6 +50,34 @@ const ResultDescription = (props: ResultDescriptionArguments) => {
       {props.quadruplex.onz_class != "" ? (
         <Descriptions.Item label="ONZM class:">
           {props.quadruplex.onz_class}
+        </Descriptions.Item>
+      ) : (
+        <></>
+      )}
+      {props.quadruplex.handedness ? (
+        <Descriptions.Item label="Handedness:">
+          {props.quadruplex.handedness}
+        </Descriptions.Item>
+      ) : (
+        <></>
+      )}
+      {props.quadruplex.tetrad_polarities && props.quadruplex.tetrad_polarities.length > 0 ? (
+        <Descriptions.Item label="Tetrad polarities:">
+          {props.quadruplex.tetrad_polarities.filter(p => p !== null).join(", ")}
+        </Descriptions.Item>
+      ) : (
+        <></>
+      )}
+      {props.quadruplex.path && props.quadruplex.path.length > 0 ? (
+        <Descriptions.Item label="Path:">
+          {props.quadruplex.path.join(", ")}
+        </Descriptions.Item>
+      ) : (
+        <></>
+      )}
+      {props.quadruplex.bulges && props.quadruplex.bulges.length > 0 ? (
+        <Descriptions.Item label="Bulges:">
+          {props.quadruplex.bulges.join(", ")}
         </Descriptions.Item>
       ) : (
         <></>

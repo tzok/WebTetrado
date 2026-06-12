@@ -37,6 +37,12 @@ def compose_json_result(id: int):
     result["dot_bracket"]["line1"] = tetrado_request.dot_bracket_line1
     result["dot_bracket"]["line2"] = tetrado_request.dot_bracket_line2
     result["dot_bracket"]["sequence"] = tetrado_request.dot_bracket_sequence
+    result["quadruplex_dot_bracket"] = {}
+    result["quadruplex_dot_bracket"]["sequence"] = tetrado_request.quadruplex_dot_bracket_sequence
+    result["quadruplex_dot_bracket"]["structure"] = tetrado_request.quadruplex_dot_bracket_structure
+    result["quadruplex_dot_bracket"]["chi"] = tetrado_request.quadruplex_dot_bracket_chi
+    result["quadruplex_dot_bracket"]["sugar"] = tetrado_request.quadruplex_dot_bracket_sugar
+    result["quadruplex_dot_bracket"]["loop"] = tetrado_request.quadruplex_dot_bracket_loop
     result["g4_limited"] = tetrado_request.g4_limited
     result["structure_file"] = (
         tetrado_request.structure_body.url if tetrado_request.structure_body else ""
@@ -104,6 +110,12 @@ def compose_json_result(id: int):
             )
             quadruplex_single["loopClassification"] = quadruplex.loop_classification
             quadruplex_single["tetrads_no"] = quadruplex.tetrad.count()
+            quadruplex_single["handedness"] = quadruplex.handedness if quadruplex.handedness else ""
+            quadruplex_single["tetrad_polarities"] = json.loads(quadruplex.tetrad_polarities) if quadruplex.tetrad_polarities else []
+            quadruplex_single["strand_polarities"] = json.loads(quadruplex.strand_polarities) if quadruplex.strand_polarities else []
+            quadruplex_single["tracts"] = json.loads(quadruplex.tracts) if quadruplex.tracts else []
+            quadruplex_single["path"] = json.loads(quadruplex.path) if quadruplex.path else []
+            quadruplex_single["bulges"] = json.loads(quadruplex.bulges) if quadruplex.bulges else []
             quadruplex_single["tetrad"] = []
             quadruplex_single["chi_angle_value"] = []
             counter_tetrad = 1
@@ -210,6 +222,7 @@ def compose_json_result(id: int):
         nucleotide_single["name"] = nucleotide.name
         nucleotide_single["glycosidicBond"] = nucleotide.glycosidicBond
         nucleotide_single["chi_angle"] = nucleotide.chi_angle
+        nucleotide_single["sugar_pucker"] = nucleotide.sugar_pucker if nucleotide.sugar_pucker else ""
         result["nucleotides"].append(nucleotide_single)
         counter += 1
     result["remove_date"] = (tetrado_request.timestamp + timedelta(days=7)).strftime(

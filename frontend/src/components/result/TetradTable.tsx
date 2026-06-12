@@ -8,6 +8,7 @@ interface TetradTableArguments {
   value: tetrad[];
   g4Limited: boolean;
   id: boolean;
+  tetradPolarities?: (string | null)[];
 }
 export default function TetradTable(props: TetradTableArguments) {
   const context = UseAppContext();
@@ -59,6 +60,11 @@ export default function TetradTable(props: TetradTableArguments) {
       key: "planarity",
     },
     {
+      title: "Tetrad polarity",
+      dataIndex: "tetrad_polarity",
+      key: "tetrad_polarity",
+    },
+    {
       title: "Download",
       dataIndex: "file",
       key: "file",
@@ -75,6 +81,12 @@ export default function TetradTable(props: TetradTableArguments) {
       ),
     },
   ];
+
+  const dataSource = props.value.map((t, i) => ({
+    ...t,
+    tetrad_polarity: props.tetradPolarities?.[i] || "",
+  }));
+
   return (
     <>
       <h2 id={props.id ? "tetrads" : ""} style={{ marginTop: "40px" }}>
@@ -82,7 +94,7 @@ export default function TetradTable(props: TetradTableArguments) {
       </h2>
       <Table
         style={{ textAlign: "center" }}
-        dataSource={props.value}
+        dataSource={dataSource}
         columns={columns_tetrad}
         scroll={
           !context.viewSettings.isCompressedViewNeeded
@@ -90,13 +102,13 @@ export default function TetradTable(props: TetradTableArguments) {
             : { x: "100%" }
         }
         rowClassName={(_r, i) =>
-          props.value[i].sequence == "GGGG" && props.g4Limited
+          dataSource[i].sequence == "GGGG" && props.g4Limited
             ? "colored-row"
             : ""
         }
       />
       <div className="horizontal-center">
-        {JsonToCsvButton(props.value, ['number', 'sequence', 'name', 'onz_class', 'gbaClassification', 'planarity'], ['Number', 'Sequence', 'Sequence (full names)', 'ONZ class', 'Tetrad combination', 'Planarity [Å]'], 'tetrad_results')}
+        {JsonToCsvButton(dataSource, ['number', 'sequence', 'name', 'onz_class', 'gbaClassification', 'planarity', 'tetrad_polarity'], ['Number', 'Sequence', 'Sequence (full names)', 'ONZ class', 'Tetrad combination', 'Planarity [Å]', 'Tetrad polarity'], 'tetrad_results')}
       </div>
     </>
   );

@@ -12,6 +12,7 @@ import crying_rna from "../../assets/images/crying_rna.png";
 
 const TetradTable = lazy(() => import("./TetradTable"));
 const LoopTable = lazy(() => import("./LoopTable"));
+const ColumnsTable = lazy(() => import("./ColumnsTable"));
 const ChiAngleTable = lazy(() => import("./ChiAngleTable"));
 const TetradPairTable = lazy(() => import("./TetradPairTable"));
 const BasePairTable = lazy(() => import("./BasePairTable"));
@@ -23,6 +24,7 @@ export const Result = () => {
     analyzer: "RNApolis Annotator",
     name: "",
     dot_bracket: { line1: "", line2: "", sequence: "" },
+    quadruplex_dot_bracket: { sequence: "", structure: "", chi: "", sugar: "", loop: "" },
     status: 0,
     error_message: "",
     structure_method: "",
@@ -203,6 +205,7 @@ export const Result = () => {
                                             helice={resultSet.helices}
                                             nucleotides={resultSet.nucleotides}
                                             dot_bracket={resultSet.dot_bracket}
+                                            quadruplex_dot_bracket={resultSet.quadruplex_dot_bracket}
                                           />
                                           <Suspense fallback={<RenderLoader />}>
                                             <StructureVisualisation
@@ -223,12 +226,26 @@ export const Result = () => {
                                                 currentTab ==
                                                 i.toString() + j.toString()
                                               }
+                                              tetradPolarities={v.tetrad_polarities}
                                             />
                                           </Suspense>
                                           <Divider />
                                           <Suspense fallback={<RenderLoader />}>
                                             <LoopTable
                                               value={v.loop}
+                                              id={
+                                                currentTab ==
+                                                i.toString() + j.toString()
+                                              }
+                                            />
+                                          </Suspense>
+                                          <Divider />
+                                          <Suspense fallback={<RenderLoader />}>
+                                            <ColumnsTable
+                                              tracts={v.tracts}
+                                              strandPolarities={v.strand_polarities}
+                                              bulges={v.bulges}
+                                              nucleotides={resultSet.nucleotides}
                                               id={
                                                 currentTab ==
                                                 i.toString() + j.toString()

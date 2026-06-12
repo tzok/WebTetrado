@@ -104,6 +104,7 @@ def add_nucleotides(nucleotides, tetrado_request):
                 str(format("%.2f" % nucleotide["chi"])) if "chi" in nucleotide else "-"
             )
             nucleotides_entity.molecule = nucleotide["molecule"]
+            nucleotides_entity.sugar_pucker = nucleotide.get("sugarPucker")
             nucleotides_entity.save()
         except Exception:
             tetrado_request.status = 5
@@ -245,6 +246,16 @@ def add_quadruplexes(quadruplexes, file_data, helice_entity, user_request, cif=F
                 if "loopClassification" in quadruplex
                 else "-"
             )
+            quadruplex_entity.handedness = quadruplex.get("handedness")
+            quadruplex_entity.tetrad_polarities = json.dumps(
+                quadruplex.get("tetradPolarities", [])
+            )
+            quadruplex_entity.strand_polarities = json.dumps(
+                quadruplex.get("strandPolarities", [])
+            )
+            quadruplex_entity.tracts = json.dumps(quadruplex.get("tracts", []))
+            quadruplex_entity.path = json.dumps(quadruplex.get("path", []))
+            quadruplex_entity.bulges = json.dumps(quadruplex.get("bulges", []))
             if file_data is not None:
                 quadruplex_entity.molecule = file_data.header["head"].upper()
             else:
@@ -387,6 +398,12 @@ def parse_result_from_backend(user_request, request_key: str):
                 user_request.dot_bracket_line1 = result["dotBracket"]["line1"]
                 user_request.dot_bracket_line2 = result["dotBracket"]["line2"]
                 user_request.dot_bracket_sequence = result["dotBracket"]["sequence"]
+                qdb = result.get("quadruplexDotBracket", {})
+                user_request.quadruplex_dot_bracket_sequence = qdb.get("sequence", "")
+                user_request.quadruplex_dot_bracket_structure = qdb.get("structure", "")
+                user_request.quadruplex_dot_bracket_chi = qdb.get("chi", "")
+                user_request.quadruplex_dot_bracket_sugar = qdb.get("sugar", "")
+                user_request.quadruplex_dot_bracket_loop = qdb.get("loop", "")
                 canonical = False
                 non_canonical = False
 

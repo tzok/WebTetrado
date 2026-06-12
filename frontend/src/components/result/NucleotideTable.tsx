@@ -35,6 +35,11 @@ export default function NucleotideTable(props: NucleotideTableArguemnts) {
             dataIndex: "glycosidicBond",
             key: "glycosidicBond",
         },
+        {
+            title: "Sugar pucker",
+            dataIndex: "sugar_pucker",
+            key: "sugar_pucker",
+        },
     ];
     return (
         <>
@@ -52,7 +57,7 @@ export default function NucleotideTable(props: NucleotideTableArguemnts) {
                 columns={columns_nucleotides}
             />
             <div className="horizontal-center">
-                {JsonToCsvButton(props.value, ['number', 'symbol', 'name', 'chi_angle', 'glycosidicBond'], ['Number', 'Symbol', 'Full name', 'Chi angle (value) [°]', 'Chi angle (type)'], 'nucleotide_results')}
+                {JsonToCsvButton(props.value, ['number', 'symbol', 'name', 'chi_angle', 'glycosidicBond', 'sugar_pucker'], ['Number', 'Symbol', 'Full name', 'Chi angle (value) [°]', 'Chi angle (type)', 'Sugar pucker'], 'nucleotide_results')}
             </div>
         </>
     );

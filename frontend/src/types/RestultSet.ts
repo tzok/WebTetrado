@@ -43,6 +43,12 @@ export type quadruplex = {
   chi_angle_value: chi_angle_value[];
   type: string;
   loop: loop[];
+  handedness: string;
+  tetrad_polarities: (string | null)[];
+  strand_polarities: (string | null)[][];
+  tracts: string[][];
+  path: string[];
+  bulges: string[];
 };
 export type tetrad_pair = {
   number: number;
@@ -59,15 +65,29 @@ export type nucleotide = {
   nucleotides: string[];
   glycosidicBond: string;
   chi_angle: string;
+  sugar_pucker: string;
 };
 export type helice = {
   quadruplexes: quadruplex[];
   tetrad_pairs: tetrad_pair[];
 };
+export type dot_bracket_values = {
+  line1: string;
+  line2: string;
+  sequence: string;
+};
+export type quadruplex_dot_bracket_values = {
+  sequence: string;
+  structure: string;
+  chi: string;
+  sugar: string;
+  loop: string;
+};
 export type result_values = {
   analyzer: string;
   name: string;
   dot_bracket: dot_bracket_values;
+  quadruplex_dot_bracket: quadruplex_dot_bracket_values;
   status: number;
   error_message: string;
   structure_method: string;
@@ -86,11 +106,6 @@ export type result_values = {
   nucleotides: nucleotide[];
   remove_date: string;
   model: number;
-};
-export type dot_bracket_values = {
-  line1: string;
-  line2: string;
-  sequence: string;
 };
 export type visualsation_switch_result = {
   varna_non_can: boolean;
