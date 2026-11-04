@@ -50,7 +50,7 @@ cron-descriptor==1.4.5
     # via django-celery-beat
 croniter==6.2.2
     # via rq
-cryptography==47.0.0
+cryptography==50.0.0
     # via
     #   -r requirements.in
     #   http-ece
