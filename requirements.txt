@@ -56,7 +56,7 @@ cryptography==47.0.0
     #   http-ece
     #   py-vapid
     #   pywebpush
-django==5.2.13
+django==5.2.17
     # via
     #   -r requirements.in
     #   django-celery-beat
