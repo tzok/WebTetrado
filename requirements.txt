@@ -88,7 +88,7 @@ http-ece==1.2.1
     # via pywebpush
 httpretty==1.1.4
     # via -r requirements.in
-idna==3.13
+idna==3.15
     # via
     #   requests
     #   yarl
