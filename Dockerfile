@@ -1,7 +1,7 @@
 FROM alpine:3.19.1
 
 ENV PYTHONUNBUFFERED 1
-RUN apk add --no-cache bash build-base curl git nodejs npm postgresql-dev py3-pip python3 python3-dev supervisor
+RUN apk add --no-cache bash bison build-base cmake curl flex git nodejs npm postgresql-dev py3-pip python3 python3-dev supervisor
 
 RUN mkdir -p /opt/webtetrado
 WORKDIR /opt/webtetrado/
