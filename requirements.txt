@@ -94,6 +94,10 @@ idna==3.13
     #   yarl
 kombu==5.6.2
     # via celery
+mmcif==1.1.0
+    # via -r requirements.in
+msgpack==1.1.2
+    # via mmcif
 multidict==6.7.1
     # via
     #   aiohttp
@@ -133,6 +137,7 @@ redis==7.4.0
 requests==2.33.1
     # via
     #   -r requirements.in
+    #   mmcif
     #   pywebpush
 rq==2.8.0
     # via
